@@ -40,6 +40,7 @@ public class Spieler : MonoBehaviour
                 gewinn.SetActive(false);
                 punkteAnzeige.text = "Gewonnen";
                 infoAnzeige.text = "Du hast gewonnen!";
+                spielGestartet = false;
                 PlayerPrefs.SetFloat("zeitAlt", Time.time - zeitStart);
                 PlayerPrefs.Save();
             }
@@ -69,9 +70,37 @@ public class Spieler : MonoBehaviour
                 gewinn.SetActive(false);
                 lebenAnzeige.text = "Verloren";
                 infoAnzeige.text = "Du hast verloren!";
+                spielGestartet = false;
             }
         }
 
+    }
+
+    public void SpielNeuButton_Click()
+    {
+        if (spielGestartet) { return; }
+        anzahlPunkte = 0;
+        anzahlLeben = 3;
+        float zeitAlt = 0;
+        if (PlayerPrefs.HasKey("zeitAlt"))
+        {
+            zeitAlt = PlayerPrefs.GetFloat("zeitAlt");
+        }
+
+
+        punkteAnzeige.text = "Punkte: 0";
+        lebenAnzeige.text = "Leben: 3";
+        zeitAnzeige.text = "Zeit:    0.0 sec.";
+        zeitAltAnzeige.text = string.Format("Alt: {0,6:0.0} sec.", zeitAlt);
+        infoAnzeige.text = "Bei betätigen einer beliebigen Taste beginnt das Spiel \n"
+            + "Lenke den schwarzen Spieler mit den Pfeiltasten. \n"
+            + "Sammle grüne Punkte und vermeide die roten Gefahren";
+
+        transform.position = new Vector3(0, -4.4f, 0);
+        gameObject.SetActive(true);
+
+        gewinn.transform.position = new Vector3(4, -2.7f, 0);
+        gewinn.SetActive(true);
     }
 
     void NaechstesLeben()
